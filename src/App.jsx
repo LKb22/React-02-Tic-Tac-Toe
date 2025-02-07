@@ -1,6 +1,9 @@
 // Import the Player component
 import Player from "./components/Player.jsx";
 
+// Import the GameBoard component
+import GameBoard from "./components/GameBoard.jsx";
+
 function App() {
 	return (
 		<main>
@@ -15,6 +18,8 @@ function App() {
 						symbol="O"
 					/>
 				</ol>
+
+        <GameBoard />
 			</div>
 		</main>
 	);

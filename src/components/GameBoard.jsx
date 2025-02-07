@@ -9,7 +9,11 @@ const initialGameBoard = [
 ]
 
 // GameBoard component to render the game board:
-export default function GameBoard() {
+// Lifting the state up STEP 4: GameBoard accepts the onSelectSquare function as a prop, so that it can be called when a square is selected. This function is passed down from the App component, where it is defined and updates the active player state.
+
+// Lifting the state up STEP 10: Accept the activePlayerSymbol prop from the App component. This prop stores the symbol of the currently active player. Add this prop dynamically to the handleSelectSquare function to update the selected square of the game board with the correct symbol- based on the currently active player, either X or O.
+
+export default function GameBoard({ onSelectSquare, activePlayerSymbol }) {
 
   // STEP 3: useState - We need to manage the state of the gameboard so that, when a player clicks a button, we can change and update the UI of that button with the players symbol without having to reload the page. The default value of useState / state value is the initialGameBoard state. Use destructuring as usual.
   const [gameBoard, setGameBoard] = useState(initialGameBoard);
@@ -27,9 +31,12 @@ export default function GameBoard() {
   function handleSelectSquare(rowIndex, colIndex) {
     setGameBoard((prevGameBoard) => {
       const updatedBoard = [...prevGameBoard.map(innerArray => [...innerArray])];
-      updatedBoard[rowIndex][colIndex] = 'x';
+      updatedBoard[rowIndex][colIndex] = activePlayerSymbol;
       return updatedBoard;
     });
+
+    // Lifting the state up STEP 5: Call the onSelectSquare function here, since this handleSelectSquare pointer function is called when a square is selected (button onClick).
+    onSelectSquare();
   }
 
   return (
@@ -39,7 +46,7 @@ export default function GameBoard() {
       STEP 6: Of course, we now want to use the 'gameBoard state snapshot' here instead of the ititial gameboard, so that the board being rendered is the one with the current state vaule. */}
 
       {/* STEP 5: Add onClick to the buttons to handle the click event, passing the handleSelectSquare as the pointer function that handles the logic of the click event. Use the trick of passing an anonymous function as the value to onClick, with the pointer inside of that function so that we can add arguements and control how/when it's called.  */}
-      
+
       {gameBoard.map((row, rowIndex) => <li key={rowIndex}>
         <ol>
           {row.map((playerSymbol, colIndex) => <li key={colIndex}><button onClick={() => handleSelectSquare(rowIndex, colIndex)}>{playerSymbol}</button></li>)}

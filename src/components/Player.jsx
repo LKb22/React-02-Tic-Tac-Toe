@@ -4,8 +4,8 @@ import { useState } from "react";
 // Player component to render multiple players dynamically:
 // IMPORTANT NOTE: React creates new isolated instances of components, allowing us to, for example, edit player one without affecting player two. This is why we can use the same Player component to render multiple players dynamically.
 
-// Name and Symbol as props to output different players dynamically
-export default function Player({ initialName, symbol }) {
+// Name Symbol, and isActive as props with destructuring to output different players dynamically and manage actions for the currently active player
+export default function Player({ initialName, symbol, isActive }) {
 	// State management to change the UI of the button. For this, we need useState. We can use useState multiple times to manage multiple 'pieces' of state. UseState returns an array with two elements - the current state value and a function that lets you update it - which we can store in a variable using destructuring.
 
 	// useState for the editing state:
@@ -56,7 +56,8 @@ export default function Player({ initialName, symbol }) {
 	}
 
 	return (
-		<li>
+    /* Lifting the state up STEP 8: This structure is rendered for both players X and O dynamically. Plus, isActive is a boolean defined in the app component for both players, based on whether or not they are the currently active player. So, we can simply check who the currently active player is, based on which one has the isActive value of true, and then apply the 'active' class to that player conditionally. */
+		<li className={isActive ? 'active' : undefined}>
 			<span className="player">
 				{/* Output the playerName variable dynamically */}
 				{editablePlayerName}

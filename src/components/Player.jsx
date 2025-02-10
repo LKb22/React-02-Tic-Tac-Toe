@@ -56,7 +56,7 @@ export default function Player({ initialName, symbol, isActive }) {
 	}
 
 	return (
-    /* Lifting the state up STEP 8: This structure is rendered for both players X and O dynamically. Plus, isActive is a boolean defined in the app component for both players, based on whether or not they are the currently active player. So, we can simply check who the currently active player is, based on which one has the isActive value of true, and then apply the 'active' class to that player conditionally. */
+    /* Lifting the state up Active Player STEP 8: This structure is rendered for both players X and O dynamically. Plus, isActive is a boolean defined in the app component for both players, based on whether or not they are the currently active player. So, we can simply check who the currently active player is, based on which one has the isActive value of true, and then apply the 'active' class to that player conditionally. */
 		<li className={isActive ? 'active' : undefined}>
 			<span className="player">
 				{/* Output the playerName variable dynamically */}

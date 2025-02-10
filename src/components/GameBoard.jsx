@@ -17,8 +17,23 @@ const initialGameBoard = [
 // Lifting the state up Turn Log STEP 2: Since we are not handling the gameBoard state here anymore, we can also get rid of the activePlayerSymbol prop, as this is now handled in the new gameTurns state directly in the App component.
 // export default function GameBoard({ onSelectSquare, activePlayerSymbol }) {
 
-export default function GameBoard({ onSelectSquare }) {
-  // Lifting the state up Turn Log STEP 1: REFACTORED: We need to lift this state up and create a new state for it to manage both the gameboard and the log together in the App component. Therefore, we don't need this state here anymore. We can remove it.
+export default function GameBoard({ onSelectSquare, turns }) {
+	// Lifting the state up Turn Log STEP 6:
+
+  // Add the logic to derive the gameboard from the gameTurns state (stored in the turns prop). Basically, turn the gameTurns array of objects stored in the Turns prop into the gameBoard. Start with a variable ('gameBoard') and use the initialGameBoard state for its value as a starting point. Then, override this gameBoard variable with data derived from turns, but only if we have turns. Use a for loop to achieve this, as it will only execute if we have turns to loop over. Then, in the loop, destructure the turn to extract the info about the turn that occured, that being both the square, containing the row and column indexes of the cell that was clicked, and the player, 'X or 'O', that clicked it (object destructuring twice - the player symbol and the row and column). Now, we can go to the gameBoard variable and update the cell at the derived row and col ( gameBaord[row][col]), with the current player symbol ( = player).
+
+  // DERIVING STATE:
+  // This is an example of deriving state- as we don't need to manage any state here. Instead, we are producing some derived state / some computed value (gameBoard) based on a state (the gameTurns state stored in the turns prop). We are not storing this state in the GameBoard component, but rather in the App component. Therefore, we can remove the useState hook and the gameBoard state here. This is good practice in React, as we should manage as little state as needed and try to derive as much info and as many values as possible from that state.
+	let gameBoard = initialGameBoard;
+
+	for (const turn of turns) {
+		const { square, player } = turn;
+		const { row, col } = square;
+
+		gameBoard[row][col] = player;
+	}
+
+	// Lifting the state up Turn Log STEP 1: REFACTORED: We need to lift this state up and create a new state for it to manage both the gameboard and the log together in the App component. Therefore, we don't need this state here anymore. We can remove it.
 
 	// // STEP 3: useState - We need to manage the state of the gameboard so that, when a player clicks a button, we can change and update the UI of that button with the players symbol without having to reload the page. The default value of useState / state value is the initialGameBoard state. Use destructuring as usual.
 	// const [gameBoard, setGameBoard] = useState(initialGameBoard);
@@ -57,8 +72,11 @@ export default function GameBoard({ onSelectSquare }) {
 					<ol>
 						{row.map((playerSymbol, colIndex) => (
 							<li key={colIndex}>
-                {/* Lifting the state up Turn Log STEP 3: REFACTORED: Since the handleSelectSquare function in the app component will now handle the game state, we can pass the onSelectSquare prop, which holds this function as its value, directly as a value to the button onClick prop. */}
-								<button onClick={onSelectSquare}>
+								{/* Lifting the state up Turn Log STEP 3: REFACTORED: Since the handleSelectSquare function in the app component will now handle the game state, we can pass the onSelectSquare prop, which holds this function as its value, directly as a value to the button onClick prop.
+
+                Lifting the state up Turn Log STEP 7: TO RECAP - The handeSelectSquare function in the App component is triggered when a square is selected through the onSelectSquare prop given as a pointer function to the onClick here. This function accepts the selected row and col indexes as arguements so that it can update the gameTurns state value (array) with the information about the new turn. This info / gameTurns state is then passed to the GameBoard component through a prop, 'turns'. The gameBaord is then updated with the new info, and the UI is re-rendered. This means we must pass the row and col indexes to the onSelectSquare prop here, so that the function can access these values when its called.
+                */}
+								<button onClick={() => onSelectSquare(rowIndex, colIndex)}>
 									{playerSymbol}
 								</button>
 							</li>

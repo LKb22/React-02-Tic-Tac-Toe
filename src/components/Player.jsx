@@ -45,9 +45,9 @@ export default function Player({ initialName, symbol, isActive }) {
 				// Use the value prop to set the default value of the input field to the player name dynamically
 				value={playerName}
 				// Use the onChange prop to listen to the input change event. Use the handleChange function as a pointer function to onChange so that it is called when the change event occurs (similar to the onClick event). Basically, onChange will trigger for every keystroke and provide an event object, as an argument to the pointer function, that contains the value entered by the user. Meaning, we should accept this event object in the handleChange pointer function and then use it to update the player name state.
-        onChange={handleChange}
+				onChange={handleChange}
 
-        // Two-way binding: Using value and onChange here, where we set a default value on the input, listen to a change on the input, and then feed that updated value back into the input (using state to manage the value), is called two-way binding. This is a common pattern in React, where, in react terms, you bind the value of an input field to a piece of state, and then update that state when the input changes. This way, the input field is always in sync with the state value, and vice versa.
+				// Two-way binding: Using value and onChange here, where we set a default value on the input, listen to a change on the input, and then feed that updated value back into the input (using state to manage the value), is called two-way binding. This is a common pattern in React, where, in react terms, you bind the value of an input field to a piece of state, and then update that state when the input changes. This way, the input field is always in sync with the state value, and vice versa.
 			/>
 		);
 
@@ -56,8 +56,8 @@ export default function Player({ initialName, symbol, isActive }) {
 	}
 
 	return (
-    /* Lifting the state up Active Player STEP 8: This structure is rendered for both players X and O dynamically. Plus, isActive is a boolean defined in the app component for both players, based on whether or not they are the currently active player. So, we can simply check who the currently active player is, based on which one has the isActive value of true, and then apply the 'active' class to that player conditionally. */
-		<li className={isActive ? 'active' : undefined}>
+		/* Lifting the state up Active Player STEP 8: This structure is rendered for both players X and O dynamically. Plus, isActive is a boolean defined in the app component for both players, based on whether or not they are the currently active player. So, we can simply check who the currently active player is, based on which one has the isActive value of true, and then apply the 'active' class to that player conditionally. */
+		<li className={isActive ? "active" : undefined}>
 			<span className="player">
 				{/* Output the playerName variable dynamically */}
 				{editablePlayerName}

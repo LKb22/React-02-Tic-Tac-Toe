@@ -26,7 +26,7 @@ function App() {
 
 	// Lifting the state up Active Player STEP 2: Create the function to toggle the active player between 'X' and 'O'. It calls the update state function ('setActivePlayer'), receives the current state value as an argument, and then updates that state value through that function based on the previous state value by toggling between 'X' and 'O'. We need to make sure this function gets executed when a square is selected, so that the active player changes after each turn. Since squares are selected in the gameBoard component, we need to pass this function as a prop to the gameBoard component, so that it can be called there.
 
-	// Lifting the state up Turn Log STEP 4: As mentioned, we already have this function that is called when a square is selected. We can use this function to handle both the gameBoard and Log logic. For the new setGameTurns update state function, We can use the same 'function form' syntax and 'immutability' principles approach, since the new turns array will depend on the old turns array. So, create a new constant, make a copy of the existing turns using the spread operator, and insert the new turn in front of the old turns so that the first item in the array is the most recent turn. As mentioned, each turn is an object. This object stores the square that was clicked, based on the row and cell indexes, and the player that clicked it, based on the activePlayer state value. However, we should avoid using activePlayer here directly, so that we are not 'mixing' two different states, and because we cannot guarentee that the activePlayer state value is the most recent one when the state update function is called. Instead, declare a new variable ('currentPlayer') set to 'X' as default. Then, add an if statement to check if the most recent turn, that being the first element/object of the prevTurns array, which is actually the most recent gameTurns array, has a player value of 'X'. If so, set the currentPlayer variable to 'O' to toggle between 'X' and 'O'. Only do this if the array is not empty (it is empty by default). Use this new variable storing the current player value as the player value in the new turn object. Finally, return the updated turns array.
+	// Lifting the state up Turn Log STEP 4: As mentioned, we already have this function that is called when a square is selected. We can use this function to handle both the gameBoard and Log logic. For the new setGameTurns update state function, we can use the same 'function form' syntax and 'immutability' principles approach, since the new turns array will depend on the old turns array. So, create a new constant object ('updatedTurns'), make a copy of the existing turns ('prevTurns') using the spread operator, and insert the new turn {} in front of the old turns so that the first item in the array is the most recent turn. As mentioned, each turn is an object. This object stores the square that was clicked, based on the row and cell indexes, and the player that clicked it, based on the activePlayer state value. However, we should avoid using activePlayer here directly, so that we are not 'mixing' two different states, and because we cannot guarentee that the activePlayer state value is the most recent one when the state update function is called. Instead, declare a new variable ('currentPlayer') set to 'X' as default. Then, add an if statement to check if the most recent turn, that being the first element/object of the prevTurns array, which is actually the most recent gameTurns array, has a player value of 'X'. If so, set the currentPlayer variable to 'O' to toggle between 'X' and 'O'. Only do this if the array is not empty (it is empty by default). Set this new variable storing the current player value on the player property in the 'updatedTurns' object. Set the dynamic row and col index values on the row and cal properties in the square object - these values are passed as arguements from the GameBoard component. Finally, return the updatedTurns array.
 
 	function handleSelectSquare(rowIndex, colIndex) {
 		setActivePlayer((curActivePlayer) => (curActivePlayer === "X" ? "O" : "X"));
@@ -75,12 +75,9 @@ function App() {
         Lifting the state up Turn Log STEP 5: REFACTORED: We no longer need the activePlayer prop, since the game state has been lifted up from the GameBoard component to the App component here.
 
         We can now derive the gameboard from the gameTurns state. Pass the gameTurns to the GameBoard component with a prop 'turns'  */}
-				<GameBoard
-					onSelectSquare={handleSelectSquare}
-					turns={gameTurns}
-				/>
+				<GameBoard onSelectSquare={handleSelectSquare} turns={gameTurns} />
 			</div>
-      <Log />
+			<Log turns={gameTurns} />
 		</main>
 	);
 }

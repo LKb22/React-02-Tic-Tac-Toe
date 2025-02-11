@@ -75,8 +75,10 @@ export default function GameBoard({ onSelectSquare, turns }) {
 								{/* Lifting the state up Turn Log STEP 3: REFACTORED: Since the handleSelectSquare function in the app component will now handle the game state, we can pass the onSelectSquare prop, which holds this function as its value, directly as a value to the button onClick prop.
 
                 Lifting the state up Turn Log STEP 7: TO RECAP - The handeSelectSquare function in the App component is triggered when a square is selected through the onSelectSquare prop given as a pointer function to the onClick here. This function accepts the selected row and col indexes as arguements so that it can update the gameTurns state value (array) with the information about the new turn. This info / gameTurns state is then passed to the GameBoard component through a prop, 'turns'. The gameBaord is then updated with the new info, and the UI is re-rendered. This means we must pass the row and col indexes to the onSelectSquare prop here, so that the function can access these values when its called.
+
+                Add a disabled attribute to the button to prevent the player from clicking a square more than once. If the player symbol is X or O, then we know it has already been clicked. Therefore, if the playerSymbol is not null (is X or O), disable the button.
                 */}
-								<button onClick={() => onSelectSquare(rowIndex, colIndex)}>
+								<button onClick={() => onSelectSquare(rowIndex, colIndex)} disabled={playerSymbol !== null}>
 									{playerSymbol}
 								</button>
 							</li>

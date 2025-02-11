@@ -14,7 +14,7 @@ import Log from "./components/Log.jsx";
 function deriveActivePlayer(gameTurns) {
 	let currentPlayer = "X";
 	if (gameTurns.length > 0 && gameTurns[0].player === "X") {
-		currentPlayer = "0";
+		currentPlayer = "O";
 	}
 	return currentPlayer;
 }
@@ -56,7 +56,7 @@ function App() {
 		setGameTurns((prevTurns) => {
 			// let currentPlayer = "X";
 			// if (prevTurns.length > 0 && prevTurns[0].player === "X") {
-			// 	currentPlayer = "0";
+			// 	currentPlayer = "O";
 			// }
 
 			const currentPlayer = deriveActivePlayer(prevTurns);

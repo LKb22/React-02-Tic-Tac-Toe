@@ -12,6 +12,9 @@ import GameBoard from "./components/GameBoard.jsx";
 // Import the Log component
 import Log from "./components/Log.jsx";
 
+// Import the GameOver component
+import GameOver from "./components/GameOver.jsx";
+
 // Checking for a Match STEP 0: The easiest solution is to check for a winning combination after every turn and then to display this winning combination in the UI once there is a match. We created an array containing all of the winning combinations in the winning-combinations.js file. We can now import this array into the App component and use it to check for a match after every turn.
 // Import the winning combinations array
 import { WINNING_COMBINATIONS } from "./winning-combinations.js";
@@ -88,9 +91,9 @@ function App() {
 
 	// Checking for a Match STEP 7: Now that we have the gameBoard here in the App component directly, we can extract the different symbols stored in that gameBoard whose positions match the positions defined by our winning combinations.
 
-  // WINNING_COMBINATIONS is an array that holds all possible ways a player can win (rows, columns, diagonals). Loop through each winning combination (8 possible combinations = 8 objects in the array). Each winning combination consists of three {row, column} objects, which of course represent three cells on the game board, based on their row and column indexes, that make up a winning combination when they all have the same player symbol as a value (X or O). So, we can simply loop through to get each winning combination one by one, take the three positions of that combination, pass them to the gameboard to get the current player symbols on the actual gameBoard that correspond to these three positions, and then see if those symbols match. If yes, that is a win, if not, keep going through the loop and continue to play the game.
+	// WINNING_COMBINATIONS is an array that holds all possible ways a player can win (rows, columns, diagonals). Loop through each winning combination (8 possible combinations = 8 objects in the array). Each winning combination consists of three {row, column} objects, which of course represent three cells on the game board, based on their row and column indexes, that make up a winning combination when they all have the same player symbol as a value (X or O). So, we can simply loop through to get each winning combination one by one, take the three positions of that combination, pass them to the gameboard to get the current player symbols on the actual gameBoard that correspond to these three positions, and then see if those symbols match. If yes, that is a win, if not, keep going through the loop and continue to play the game.
 
-  // Example: first loop iteration: combination = [{row: 0, column: 0}, {row: 0, column: 1}, {row: 0, column: 2}]. Therefore, combination is an array of three objects, with indexes 0, 1, and 2 respectively, and with each object having a row and column property holding the row and column indexes of that cell as values. Pass these three positions seperately to the gameBoard to get the symbol stored at each position, saving them in seperate variables. Check if the first position/variable is not null. If not, check if the second and then the third symbols match its value, either X or O. If so, we have a winner. The loop will do this for all 8 combinations. It will get the three cells of that winning combination (objects with row and column indexes) in an array 'combination', pass those 'positions' seperately to the gameboard to get the values stored at those three positions, and then check if those values are the same. This will happen everytime the gameboard is updated and the App component is re-executed.
+	// Example: first loop iteration: combination = [{row: 0, column: 0}, {row: 0, column: 1}, {row: 0, column: 2}]. Therefore, combination is an array of three objects, with indexes 0, 1, and 2 respectively, and with each object having a row and column property holding the row and column indexes of that cell as values. Pass these three positions seperately to the gameBoard to get the symbol stored at each position, saving them in seperate variables. Check if the first position/variable is not null. If not, check if the second and then the third symbols match its value, either X or O. If so, we have a winner. The loop will do this for all 8 combinations. It will get the three cells of that winning combination (objects with row and column indexes) in an array 'combination', pass those 'positions' seperately to the gameboard to get the values stored at those three positions, and then check if those values are the same. This will happen everytime the gameboard is updated and the App component is re-executed.
 
 	let winner = null;
 
@@ -167,8 +170,10 @@ function App() {
 
         // Checking for a Match STEP 5: Since we are now computing / deriving the gameBoard directly here in the App as a value, we can simply pass it directly to the GameBoard component with a new prop, replacing the turns prop that passed the gameTurns state value carrying the gameBoard data to the gameBoard component, where the gameboard was then computed / derived from this data. Update the GameBoard component to accept this new prop and use it to render the gameboard.
           turns={gameTurns}
+
+        // Game over component STEP 1: Import the GameOver component into the App component and then render it here, passing the winner dynamically as a prop ('winner'). 
         */}
-				{winner && <p>You won, {winner}!</p>}
+				{winner && <GameOver winner={winner} />}
 				<GameBoard
 					onSelectSquare={handleSelectSquare}
 					board={gameBoard}

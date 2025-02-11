@@ -63,17 +63,17 @@ function App() {
 	// Deriving state active player STEP 4: Replace this code with the helper function, passing the gameTurns state value as an arguement.
 	const activePlayer = deriveActivePlayer(gameTurns);
 
-  // Checking for a Match STEP 2.1: Move the gameBoard to the App component so that we can compare it to the winning combinations array here:
+	// Checking for a Match STEP 2.1: Move the gameBoard to the App component so that we can compare it to the winning combinations array here:
 
-  // Lifting the state up Turn Log STEP 6:
+	// Lifting the state up Turn Log STEP 6:
 
-  // Add the logic to derive the gameboard from the gameTurns state (stored in the turns prop - REFACTORED: now the gameTurns state directly in the App component). Basically, turn the gameTurns array of objects stored in the Turns prop into the gameBoard. Start with a variable ('gameBoard') and use the initialGameBoard state for its value as a starting point. Then, override this gameBoard variable with data derived from turns, but only if we have turns. Use a for loop to achieve this, as it will only execute if we have turns to loop over. Then, in the loop, destructure the turn to extract the info about the turn that occured, that being both the square, containing the row and column indexes of the cell that was clicked, and the player, 'X or 'O', that clicked it (object destructuring twice - the player symbol and the row and column). Now, we can go to the gameBoard variable and update the cell at the derived row and col ( gameBaord[row][col]), with the current player symbol ( = player).
+	// Add the logic to derive the gameboard from the gameTurns state (stored in the turns prop - REFACTORED: now the gameTurns state directly in the App component). Basically, turn the gameTurns array of objects stored in the Turns prop into the gameBoard. Start with a variable ('gameBoard') and use the initialGameBoard state for its value as a starting point. Then, override this gameBoard variable with data derived from turns, but only if we have turns. Use a for loop to achieve this, as it will only execute if we have turns to loop over. Then, in the loop, destructure the turn to extract the info about the turn that occured, that being both the square, containing the row and column indexes of the cell that was clicked, and the player, 'X or 'O', that clicked it (object destructuring twice - the player symbol and the row and column). Now, we can go to the gameBoard variable and update the cell at the derived row and col ( gameBaord[row][col]), with the current player symbol ( = player).
 
-  // DERIVING STATE:
-  // This is an example of deriving state- as we don't need to manage any state here. Instead, we are producing some derived state / some computed value (gameBoard) based on a state (the gameTurns state stored in the turns prop). We are not storing this state in the GameBoard component, but rather in the App component. Therefore, we can remove the useState hook and the gameBoard state here. This is good practice in React, as we should manage as little state as needed and try to derive as much info and as many values as possible from that state.
+	// DERIVING STATE:
+	// This is an example of deriving state- as we don't need to manage any state here. Instead, we are producing some derived state / some computed value (gameBoard) based on a state (the gameTurns state stored in the turns prop). We are not storing this state in the GameBoard component, but rather in the App component. Therefore, we can remove the useState hook and the gameBoard state here. This is good practice in React, as we should manage as little state as needed and try to derive as much info and as many values as possible from that state.
 
-  // Checking for a Match STEP 4: Now that we've moved and are computing / deriving the gameboard here in the App component, we are iterating directly through the gameTurns state value, not the turns prop that carried this value to the GameBoard component.
-    // 	for (const turn of turns) {
+	// Checking for a Match STEP 4: Now that we've moved and are computing / deriving the gameboard here in the App component, we are iterating directly through the gameTurns state value, not the turns prop that carried this value to the GameBoard component.
+	// 	for (const turn of turns) {
 
 	let gameBoard = initialGameBoard;
 
@@ -84,15 +84,32 @@ function App() {
 		gameBoard[row][col] = player;
 	}
 
+	// Checking for a Match STEP 1: Here again, we don't need to create and manage another state in order to check for a match. The gameTurns state already gives us all of the information we need, and we're updating that state after every turn, in turn re-executing the App component function every time. So, again, we can simply 'derive' the state. We can use a for loop to go through all of the winning combinations in the WINNING_COMBINATIONS array and look for a match. Of course, that means we also need the most recent gameboard after every turn to compare it to. The gameboard is currently in the GameBoard component. The simplest solution is to move this code to the App component to make it accessible here. This also means that we will no longer be computing the value of the gameboard in the GameBoard component, but rather here in the App component.
 
-  // Checking for a Match STEP 1: Here again, we don't need to create and manage another state in order to check for a match. The gameTurns state already gives us all of the information we need, and we're updating that state after every turn, in turn re-executing the App component function every time. So, again, we can simply 'derive' the state. We can use a for loop to go through all of the winning combinations in the WINNING_COMBINATIONS array and look for a match. Of course, that means we also need the most recent gameboard after every turn to compare it to. The gameboard is currently in the GameBoard component. The simplest solution is to move this code to the App component to make it accessible here. This also means that we will no longer be computing the value of the gameboard in the GameBoard component, but rather here in the App component.
+	// Checking for a Match STEP 7: Now that we have the gameBoard here in the App component directly, we can extract the different symbols stored in that gameBoard whose positions match the positions defined by our winning combinations.
 
-  // Checking for a Match STEP 7: Now that we have the gameBoard here in the App component directly, we can extract the different symbols stored in that gameBoard from the positions that are defined by our winning combinations.
-  for ( const combination of WINNING_COMBINATIONS ) {
-    const firstSquareSymbol =
-    const secondSquareSymbol =
-    const thirdSquareSymbol =
-  }
+  // WINNING_COMBINATIONS is an array that holds all possible ways a player can win (rows, columns, diagonals). Loop through each winning combination (8 possible combinations = 8 objects in the array). Each winning combination consists of three {row, column} objects, which of course represent three cells on the game board, based on their row and column indexes, that make up a winning combination when they all have the same player symbol as a value (X or O). So, we can simply loop through to get each winning combination one by one, take the three positions of that combination, pass them to the gameboard to get the current player symbols on the actual gameBoard that correspond to these three positions, and then see if those symbols match. If yes, that is a win, if not, keep going through the loop and continue to play the game.
+
+  // Example: first loop iteration: combination = [{row: 0, column: 0}, {row: 0, column: 1}, {row: 0, column: 2}]. Therefore, combination is an array of three objects, with indexes 0, 1, and 2 respectively, and with each object having a row and column property holding the row and column indexes of that cell as values. Pass these three positions seperately to the gameBoard to get the symbol stored at each position, saving them in seperate variables. Check if the first position/variable is not null. If not, check if the second and then the third symbols match its value, either X or O. If so, we have a winner. The loop will do this for all 8 combinations. It will get the three cells of that winning combination (objects with row and column indexes) in an array 'combination', pass those 'positions' seperately to the gameboard to get the values stored at those three positions, and then check if those values are the same. This will happen everytime the gameboard is updated and the App component is re-executed.
+
+	let winner = null;
+
+	for (const combination of WINNING_COMBINATIONS) {
+		const firstSquareSymbol =
+			gameBoard[combination[0].row][combination[0].column];
+		const secondSquareSymbol =
+			gameBoard[combination[1].row][combination[1].column];
+		const thirdSquareSymbol =
+			gameBoard[combination[2].row][combination[2].column];
+
+		if (
+			firstSquareSymbol &&
+			firstSquareSymbol === secondSquareSymbol &&
+			firstSquareSymbol === thirdSquareSymbol
+		) {
+			winner = firstSquareSymbol;
+		}
+	}
 
 	// Lifting the state up Active Player STEP 2: Create the function to toggle the active player between 'X' and 'O'. It calls the update state function ('setActivePlayer'), receives the current state value as an argument, and then updates that state value through that function based on the previous state value by toggling between 'X' and 'O'. We need to make sure this function gets executed when a square is selected, so that the active player changes after each turn. Since squares are selected in the gameBoard component, we need to pass this function as a prop to the gameBoard component, so that it can be called there.
 
@@ -151,6 +168,7 @@ function App() {
         // Checking for a Match STEP 5: Since we are now computing / deriving the gameBoard directly here in the App as a value, we can simply pass it directly to the GameBoard component with a new prop, replacing the turns prop that passed the gameTurns state value carrying the gameBoard data to the gameBoard component, where the gameboard was then computed / derived from this data. Update the GameBoard component to accept this new prop and use it to render the gameboard.
           turns={gameTurns}
         */}
+				{winner && <p>You won, {winner}!</p>}
 				<GameBoard
 					onSelectSquare={handleSelectSquare}
 					board={gameBoard}

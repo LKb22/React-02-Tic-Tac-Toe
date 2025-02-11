@@ -2,12 +2,12 @@
 // Import the useState hook from React
 // import { useState } from "react";
 
-// STEP 1: Create a constant variable to store the initial game board state. Use an array of arrays to build a grid of cells as the game board. In the initial state, since no cells have been selected, their default values are null.
-const initialGameBoard = [
-	[null, null, null],
-	[null, null, null],
-	[null, null, null],
-];
+// Checking for a Match STEP 3: Move the initialgameBoard to the App component along with the gameBoard state:
+// const initialGameBoard = [
+// 	[null, null, null],
+// 	[null, null, null],
+// 	[null, null, null],
+// ];
 
 // GameBoard component to render the game board:
 // Lifting the state up Active Player STEP 4: GameBoard accepts the onSelectSquare function as a prop, so that it can be called when a square is selected. This function is passed down from the App component, where it is defined and updates the active player state.
@@ -17,21 +17,16 @@ const initialGameBoard = [
 // Lifting the state up Turn Log STEP 2: Since we are not handling the gameBoard state here anymore, we can also get rid of the activePlayerSymbol prop, as this is now handled in the new gameTurns state directly in the App component.
 // export default function GameBoard({ onSelectSquare, activePlayerSymbol }) {
 
-export default function GameBoard({ onSelectSquare, turns }) {
-	// Lifting the state up Turn Log STEP 6:
+export default function GameBoard({ onSelectSquare, board }) {
+  // Checking for a Match STEP 2: Move the gameBoard to the App component so that we can compare it to the winning combinations array there.
+  //  let gameBoard = initialGameBoard;
 
-  // Add the logic to derive the gameboard from the gameTurns state (stored in the turns prop). Basically, turn the gameTurns array of objects stored in the Turns prop into the gameBoard. Start with a variable ('gameBoard') and use the initialGameBoard state for its value as a starting point. Then, override this gameBoard variable with data derived from turns, but only if we have turns. Use a for loop to achieve this, as it will only execute if we have turns to loop over. Then, in the loop, destructure the turn to extract the info about the turn that occured, that being both the square, containing the row and column indexes of the cell that was clicked, and the player, 'X or 'O', that clicked it (object destructuring twice - the player symbol and the row and column). Now, we can go to the gameBoard variable and update the cell at the derived row and col ( gameBaord[row][col]), with the current player symbol ( = player).
+  //  for (const turn of turns) {
+  //    const { square, player } = turn;
+  //    const { row, col } = square;
 
-  // DERIVING STATE:
-  // This is an example of deriving state- as we don't need to manage any state here. Instead, we are producing some derived state / some computed value (gameBoard) based on a state (the gameTurns state stored in the turns prop). We are not storing this state in the GameBoard component, but rather in the App component. Therefore, we can remove the useState hook and the gameBoard state here. This is good practice in React, as we should manage as little state as needed and try to derive as much info and as many values as possible from that state.
-	let gameBoard = initialGameBoard;
-
-	for (const turn of turns) {
-		const { square, player } = turn;
-		const { row, col } = square;
-
-		gameBoard[row][col] = player;
-	}
+  //    gameBoard[row][col] = player;
+  //  }
 
 	// Lifting the state up Turn Log STEP 1: REFACTORED: We need to lift this state up and create a new state for it to manage both the gameboard and the log together in the App component. Therefore, we don't need this state here anymore. We can remove it.
 
@@ -67,7 +62,8 @@ export default function GameBoard({ onSelectSquare, turns }) {
 
 			{/* STEP 5: Add onClick to the buttons to handle the click event, passing the handleSelectSquare as the pointer function that handles the logic of the click event. Use the trick of passing an anonymous function as the value to onClick, with the pointer inside of that function so that we can add arguements and control how/when it's called.  */}
 
-			{gameBoard.map((row, rowIndex) => (
+      {/* Checking for a Match STEP 6: Now, we can render the gameboard with the new board prop from the App component, which already holds the current state of the game board as its value directly, since its now computed there, instead of using the gameBoard variable whose value was computed here in the GameBoard component using the gameTurns data passed through the turns prop. */}
+			{board.map((row, rowIndex) => (
 				<li key={rowIndex}>
 					<ol>
 						{row.map((playerSymbol, colIndex) => (

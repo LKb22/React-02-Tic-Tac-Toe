@@ -114,6 +114,9 @@ function App() {
 		}
 	}
 
+  // Game over component STEP 2: We are currently checking for a winner, but not for a draw. We know that our board has 9 cells, or turns. Therefore, we can simply check if our gameTurns array has reached 9 turns without a winner and store this is a new variable as a true or false value. This is another great example of utilizing the gameTurns state to derive a new state value.
+  const hasDraw = gameTurns.length === 9 && !winner;
+
 	// Lifting the state up Active Player STEP 2: Create the function to toggle the active player between 'X' and 'O'. It calls the update state function ('setActivePlayer'), receives the current state value as an argument, and then updates that state value through that function based on the previous state value by toggling between 'X' and 'O'. We need to make sure this function gets executed when a square is selected, so that the active player changes after each turn. Since squares are selected in the gameBoard component, we need to pass this function as a prop to the gameBoard component, so that it can be called there.
 
 	// Lifting the state up Turn Log STEP 4: As mentioned, we already have this function that is called when a square is selected. We can use this function to handle both the gameBoard and Log logic. For the new setGameTurns update state function, we can use the same 'function form' syntax and 'immutability' principles approach, since the new turns array will depend on the old turns array. So, create a new constant object ('updatedTurns'), make a copy of the existing turns ('prevTurns') using the spread operator, and insert the new turn {} in front of the old turns so that the first item in the array is the most recent turn. As mentioned, each turn is an object. This object stores the square that was clicked, based on the row and cell indexes, and the player that clicked it, based on the activePlayer state value. However, we should avoid using activePlayer here directly, so that we are not 'mixing' two different states, and because we cannot guarentee that the activePlayer state value is the most recent one when the state update function is called. Instead, declare a new variable ('currentPlayer') set to 'X' as default. Then, add an if statement to check if the most recent turn, that being the first element/object of the prevTurns array, which is actually the most recent gameTurns array, has a player value of 'X'. If so, set the currentPlayer variable to 'O' to toggle between 'X' and 'O'. Only do this if the array is not empty (it is empty by default). Set this new variable storing the current player value on the player property in the 'updatedTurns' object. Set the dynamic row and col index values on the row and cal properties in the square object - these values are passed as arguements from the GameBoard component. Finally, return the updatedTurns array.
@@ -168,12 +171,14 @@ function App() {
 
         We can now derive the gameboard from the gameTurns state. Pass the gameTurns to the GameBoard component with a prop 'turns'. Finally, as a last step for 'Lifting the state up Turn Log', pass it to the Log as well.
 
-        // Checking for a Match STEP 5: Since we are now computing / deriving the gameBoard directly here in the App as a value, we can simply pass it directly to the GameBoard component with a new prop, replacing the turns prop that passed the gameTurns state value carrying the gameBoard data to the gameBoard component, where the gameboard was then computed / derived from this data. Update the GameBoard component to accept this new prop and use it to render the gameboard.
+        Checking for a Match STEP 5: Since we are now computing / deriving the gameBoard directly here in the App as a value, we can simply pass it directly to the GameBoard component with a new prop, replacing the turns prop that passed the gameTurns state value carrying the gameBoard data to the gameBoard component, where the gameboard was then computed / derived from this data. Update the GameBoard component to accept this new prop and use it to render the gameboard.
           turns={gameTurns}
 
-        // Game over component STEP 1: Import the GameOver component into the App component and then render it here, passing the winner dynamically as a prop ('winner'). 
+        Game over component STEP 1: Import the GameOver component into the App component and then render it here, passing the winner dynamically as a prop ('winner').
+
+        Game over component STEP 3: Add the condition to render the GameOver component for a winner OR a draw.
         */}
-				{winner && <GameOver winner={winner} />}
+				{(winner || hasDraw) && <GameOver winner={winner} />}
 				<GameBoard
 					onSelectSquare={handleSelectSquare}
 					board={gameBoard}

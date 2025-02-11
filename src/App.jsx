@@ -78,7 +78,8 @@ function App() {
 	// Checking for a Match STEP 4: Now that we've moved and are computing / deriving the gameboard here in the App component, we are iterating directly through the gameTurns state value, not the turns prop that carried this value to the GameBoard component.
 	// 	for (const turn of turns) {
 
-	let gameBoard = initialGameBoard;
+  // Game over component STEP 7: There is now a bug in our code. That's because we are 'editing'/'overriding' our gameBoard with the symbols of the players as they click on cells, BUT this gameBoard is actually the initialGameBoard (	let gameBoard = initialGameBoard;) - an array of arrays. In JS, arrays, like objects, are reference values, meaning they are stored in memory, and we're always editing that same array or object. So, the same initialGameBoard is being updated and saved with the player symbols after each turn. As expected, this initialGameBoard array stored in memory is not automatically reset when we reset the gameTurns state / game. It's still the edited, old array. To solve this, we can simply create a 'deep' copy of the array - a deep copy meaning copies of both the outer and inner arrays - using the spread operator and map. GameBoard equals a copy of the initialGameBoard array (...initialGameBoard), where each (.map) nested array (array) is (=>) a copy of itself ([...array]). Now, we are always editing a brand new array when we derive the gameboard and never the initial array in memory.
+  let gameBoard = [...initialGameBoard.map(array => [...array])];
 
 	for (const turn of gameTurns) {
 		const { square, player } = turn;
@@ -114,8 +115,8 @@ function App() {
 		}
 	}
 
-  // Game over component STEP 2: We are currently checking for a winner, but not for a draw. We know that our board has 9 cells, or turns. Therefore, we can simply check if our gameTurns array has reached 9 turns without a winner and store this is a new variable as a true or false value. This is another great example of utilizing the gameTurns state to derive a new state value.
-  const hasDraw = gameTurns.length === 9 && !winner;
+	// Game over component STEP 2: We are currently checking for a winner, but not for a draw. We know that our board has 9 cells, or turns. Therefore, we can simply check if our gameTurns array has reached 9 turns without a winner and store this is a new variable as a true or false value. This is another great example of utilizing the gameTurns state to derive a new state value.
+	const hasDraw = gameTurns.length === 9 && !winner;
 
 	// Lifting the state up Active Player STEP 2: Create the function to toggle the active player between 'X' and 'O'. It calls the update state function ('setActivePlayer'), receives the current state value as an argument, and then updates that state value through that function based on the previous state value by toggling between 'X' and 'O'. We need to make sure this function gets executed when a square is selected, so that the active player changes after each turn. Since squares are selected in the gameBoard component, we need to pass this function as a prop to the gameBoard component, so that it can be called there.
 
@@ -138,6 +139,11 @@ function App() {
 
 			return updatedTurns;
 		});
+	}
+
+	// Game over component STEP 5: Essentially, our game is controlled by the gameTurns state - it is our source of truth for the game - as we use it to derive the gameBoard, the activePlayer, the log, and to check for a winner. Therefore, restarting the game is as simple as re-setting gameTurns, clearing it back to an empty array, which will also reset all of the other data, as it is all derived from this state. Create a new function to handle this action. This function can use the useState update function for gameTurns ('setGameTurns') to simply update its value back to an empty array.
+	function handleRestart() {
+		setGameTurns([]);
 	}
 
 	return (
@@ -177,8 +183,15 @@ function App() {
         Game over component STEP 1: Import the GameOver component into the App component and then render it here, passing the winner dynamically as a prop ('winner').
 
         Game over component STEP 3: Add the condition to render the GameOver component for a winner OR a draw.
+
+        Game over component STEP 7: Pass the handleRestart restart function to the GameBoard component as the value of a prop ('onRestart') so that we can add it as a pointer funciton to the button onClick there.
         */}
-				{(winner || hasDraw) && <GameOver winner={winner} />}
+				{(winner || hasDraw) && (
+					<GameOver
+						winner={winner}
+						onRestart={handleRestart}
+					/>
+				)}
 				<GameBoard
 					onSelectSquare={handleSelectSquare}
 					board={gameBoard}

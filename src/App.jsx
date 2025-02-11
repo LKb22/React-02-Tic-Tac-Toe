@@ -1,3 +1,5 @@
+// Imports:
+
 // Import useState from React
 import { useState } from "react";
 
@@ -10,6 +12,11 @@ import GameBoard from "./components/GameBoard.jsx";
 // Import the Log component
 import Log from "./components/Log.jsx";
 
+// Checking for a Match STEP 0: The easiest solution is to check for a winning combination after every turn and then to display this winning combination in the UI. We created an array containing all of the winning combinations in the winning-combinations.js file. We can now import this array into the App component and use it to check for a match after every turn.
+// Import the winning combinations array
+import { WINNING_COMBINATIONS } from "./winning-combinations.js";
+
+// Helper functions:
 // Deriving state active player STEP 3: HELPER FUNCTION: Now that we have similar code to derive the active player, but with one code block taking the gameTurns state value directly and the other taking the prevTurns value, we can refactor this into a helper function that instead accepts these vlues as arguements to make it dynamic and avoid the duplicate code.
 function deriveActivePlayer(gameTurns) {
 	let currentPlayer = "X";

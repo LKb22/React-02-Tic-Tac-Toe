@@ -26,7 +26,7 @@ const PLAYERS = {
 };
 
 // Checking for a Match STEP 3.1: Move the INITIAL_GAME_BOARD to the App component along with the gameBoard state:
-// STEP 1: Create a constant variable to store the initial game board state. Use an array of arrays to build a grid of cells as the game board. In the initial state, since no cells have been selected, their default values are null.
+// GameBoard STEP 1: Create a constant variable to store the initial game board state. Use an array of arrays to build a grid of cells as the game board. In the initial state, since no cells have been selected, their default values are null.
 const INITIAL_GAME_BOARD = [
 	[null, null, null],
 	[null, null, null],
@@ -188,7 +188,9 @@ function App() {
 	return (
 		<main>
 			<div id="game-container">
-				{/* Lifting the state up Active Player STEP 6: Now, we can add the 'highlight-player' className here to highlight the currently active player.
+				{/* Player component STEP 0: We have repeated and hardcoded markup for the two players, 'X' and 'O'. This means, of course, that we should build a re-usable and dynamic custom component to render the player markup. This component should accept props to output different players dynamically and manage actions for the currently active player. To start, these are the player's name and symbol.
+
+        Lifting the state up Active Player STEP 6: Now, we can add the 'highlight-player' className here to highlight the currently active player.
 
         Lifting the state up Active Player STEP 7: We need to pass the information of who the currently active player is to the Player component through a prop so that we can add a classname dynamically. Of course, the currently active player, either X or O, is stored in the activePlayer state variable. We can create a conditional prop ('isActive') to pass to the player component that is either true or false for both players X and O based on the state value of activePlayer. ^
 
